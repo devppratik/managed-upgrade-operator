@@ -186,10 +186,10 @@ fi
 if [[ -z "$CONTAINER_ENGINE" ]]; then
     ./boilerplate/openshift/golang-osd-operator/csv-generate/common-generate-operator-bundle.py -o ${operator_name} -d ${OUTPUT_DIR} ${PREV_VERSION_OPTS} -i ${REPO_DIGEST} -V ${operator_version} ${SECONDARY_REPO_DIGEST} -e ${skip_range_enabled}
 else
-    if [[ ${CONTAINER_ENGINE##*/} == "podman" ]]; then
-        CE_OPTS="--userns keep-id -v `pwd`:`pwd`:Z"
-    else
+    # if [[ ${CONTAINER_ENGINE##*/} == "podman" ]]; then
+    #     CE_OPTS="--userns keep-id -v `pwd`:`pwd`:Z"
+    # else
         CE_OPTS="-v `pwd`:`pwd`"
-    fi
+    # fi
     $CONTAINER_ENGINE run --pull=always --rm ${CE_OPTS} -u `id -u`:0 -w `pwd` registry.access.redhat.com/ubi8/python-36 /bin/bash -c "python -m pip install --disable-pip-version-check oyaml; python ./boilerplate/openshift/golang-osd-operator/csv-generate/common-generate-operator-bundle.py -o ${operator_name} -d ${OUTPUT_DIR} ${PREV_VERSION_OPTS} -i ${REPO_DIGEST} -V ${operator_version} ${SECONDARY_REPO_DIGEST} -e ${skip_range_enabled}"
 fi

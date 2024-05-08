@@ -61,6 +61,8 @@ channels:
   currentCSV: ${operator_name}.v${OPERATOR_NEW_VERSION}
 EOF
 
+echo "Pulling  images..."
+${CONTAINER_ENGINE} login registry.redhat.io
 ${CONTAINER_ENGINE} build --pull -f "${DOCKERFILE_REGISTRY}" --build-arg "SAAS_OPERATOR_DIR=${SAAS_OPERATOR_DIR}" --tag "${registry_image}:${operator_channel}-latest" .
 
 if [ $? -ne 0 ] ; then
